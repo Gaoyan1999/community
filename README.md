@@ -17,3 +17,11 @@
 [Visual Paradigm](https://www.visual-paradigm.com)
 
 
+[Lombok Project](https://projectlombok.org/)
+
+
+```bash
+mvn flyway:migrate
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+java -jar mybatis-generator-core-x.x.x.jar -configfile \temp\generatorConfig.xml -overwrite
+```

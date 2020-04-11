@@ -1,0 +1,35 @@
+.main{
+    margin: 30px;
+    background-color: white;
+}
+
+body{
+    background-color: #efefef;
+}
+
+.bth-publish{
+    float: right;
+    margin-bottom: 15px;
+}
+
+
+.media-object{
+    width: 40px;
+    height: 40px;
+
+}
+
+.text-desc{
+    font-size :12px;
+    font-weight: normal;
+    color: #999;
+}
+
+.community-menu{
+    color: #999;
+    font-size: 13px;
+}
+
+.jumbotron{
+    margin: 50px;
+}
