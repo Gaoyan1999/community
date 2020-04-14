@@ -71,7 +71,7 @@ public class QuestionService {
 
     }
 
-    public PaginationDTO listByUserId(Integer userId, Integer page, Integer size) {
+    public PaginationDTO listByUserId(Long userId, Integer page, Integer size) {
 
         PaginationDTO paginationDTO = new PaginationDTO();
 
@@ -119,7 +119,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
          Question  question=questionMapper.selectByPrimaryKey(id);
 
          if(question ==null){
@@ -161,7 +161,7 @@ public class QuestionService {
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question=questionMapper.selectByPrimaryKey(id);
 
         Question updateQuestion = new Question();
