@@ -4,18 +4,22 @@ import life.gao.community.dto.PaginationDTO;
 import life.gao.community.dto.QuestionDTO;
 import life.gao.community.exception.CustomizeErrorCode;
 import life.gao.community.exception.CustomizeException;
+import life.gao.community.mapper.QuestionExtMapper;
 import life.gao.community.mapper.QuestionMapper;
 import life.gao.community.mapper.UserMapper;
 import life.gao.community.model.Question;
 import life.gao.community.model.QuestionExample;
 import life.gao.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -27,7 +31,8 @@ public class QuestionService {
     @Autowired
     private UserMapper userMapper;
 
-
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
     public PaginationDTO list(Integer page, Integer size) {
 
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -52,7 +57,9 @@ public class QuestionService {
         paginationDTO.setPagenation(totalPage, page);
         //size *(page-1)
         Integer offset = size * (page - 1);
-        List<Question> questions =questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(offset,size));
+        QuestionExample example = new QuestionExample();
+        example.setOrderByClause("gmt_create desc");
+        List<Question> questions =questionMapper.selectByExampleWithRowbounds(example,new RowBounds(offset,size));
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
 
@@ -169,5 +176,27 @@ public class QuestionService {
         QuestionExample example = new QuestionExample();
         example.createCriteria().andIdEqualTo(id);
         questionMapper.updateByExampleSelective(updateQuestion, example);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+        if(StringUtils.isBlank(queryDTO.getTag())){
+            return new ArrayList<>();
+        }
+
+        String [] tags=StringUtils.split(queryDTO.getTag(),',');
+        String regexpTag= Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question =new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q,questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+
+
+        return questionDTOS;
     }
 }

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/community.css">
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
 
 
 </head>
@@ -25,7 +26,9 @@
                 <div class="form-group">
                     <label for="title">问题标题(简明扼要)</label>
                     <input type="text" class="form-control" th:value="${title}" id="title" name="title"
-                           placeholder="问题标题……">
+                           placeholder="问题标题……"
+                           autocomplete="off">
+
 
                 </div>
 
@@ -38,7 +41,39 @@
                     <div class="form-group">
                         <label for="tag">添加标签：</label>
                         <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
-                               placeholder="输入标签,以逗号隔开">
+                               placeholder="输入标签,以逗号隔开" autocomplete="off"
+                               onclick="showSelectTag()"
+
+                        >
+
+
+                        <div id="select-tag" style="display: none">
+
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" th:each="selectCategory :${tags}">
+                                    <a th:href="${'#'+selectCategory.categoryName}" aria-controls="home"
+                                       role="tab" data-toggle="tab" th:text="${selectCategory.categoryName}"></a></li>
+
+
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" th:id="${selectCategory.categoryName}"
+                                     th:each="selectCategory :${tags}">
+                                        <span class="label label-info" th:each="selectTag :${selectCategory.tags}"><span
+                                                class="glyphicon glyphicon-tags"
+                                                onclick="selectTag(this)" th:data-tag="${selectTag}"
+                                                th:text="${' '+selectTag}"></span></span>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
 
                     </div>
 
@@ -48,13 +83,13 @@
                             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
 
                                 <div class="alert alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12"
-                                th:text="${error}"
-                                th:if="${error!=null}">
+                                     th:text="${error}"
+                                     th:if="${error!=null}">
                                 </div>
 
 
                             </div>
-                            <div class="col-lg-3  col-md-12 col-sm-12 col-xs-12" >
+                            <div class="col-lg-3  col-md-12 col-sm-12 col-xs-12">
                                 <button type="submit"
                                         class="btn btn-success bth-publish ">
                                     发布
