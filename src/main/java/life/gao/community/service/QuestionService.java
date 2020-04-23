@@ -2,6 +2,7 @@ package life.gao.community.service;
 
 import life.gao.community.dto.PaginationDTO;
 import life.gao.community.dto.QuestionDTO;
+import life.gao.community.dto.QuestionQueryDTO;
 import life.gao.community.exception.CustomizeErrorCode;
 import life.gao.community.exception.CustomizeException;
 import life.gao.community.mapper.QuestionExtMapper;
@@ -33,10 +34,17 @@ public class QuestionService {
 
     @Autowired
     private QuestionExtMapper questionExtMapper;
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search,Integer page, Integer size) {
+        if(StringUtils.isNotBlank(search)){
+            String[] tags=StringUtils.split(search," ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+
 
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = (int )questionMapper.countByExample(new QuestionExample());
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
 
         Integer totalPage;
         if (totalCount % size == 0) {
@@ -59,7 +67,10 @@ public class QuestionService {
         Integer offset = size * (page - 1);
         QuestionExample example = new QuestionExample();
         example.setOrderByClause("gmt_create desc");
-        List<Question> questions =questionMapper.selectByExampleWithRowbounds(example,new RowBounds(offset,size));
+        questionQueryDTO.setSize(size);
+        questionQueryDTO.setPage(offset);
+
+        List<Question> questions =questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
 
@@ -71,7 +82,7 @@ public class QuestionService {
             questionDTOS.add(questionDTO);
 
         }
-        paginationDTO.setQuestions(questionDTOS);
+        paginationDTO.setData(questionDTOS);
 
 
         return paginationDTO;
@@ -108,6 +119,9 @@ public class QuestionService {
         Integer offset = size * (page - 1);
         QuestionExample example = new QuestionExample();
         example.createCriteria().andCreatorEqualTo(userId);
+        example.setOrderByClause("gmt_create desc");
+
+
         List<Question> questions =questionMapper.selectByExampleWithRowbounds(example,new RowBounds(offset,size));
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
@@ -120,7 +134,7 @@ public class QuestionService {
             questionDTOS.add(questionDTO);
 
         }
-        paginationDTO.setQuestions(questionDTOS);
+        paginationDTO.setData(questionDTOS);
 
 
         return paginationDTO;
