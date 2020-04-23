@@ -6,6 +6,7 @@ import life.gao.community.mapper.UserMapper;
 import life.gao.community.model.User;
 import life.gao.community.provider.GithubProvider;
 import life.gao.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import java.util.UUID;
  */
 
 @Controller
+@Slf4j
 public class AuthorizeController {
 
     @Autowired
@@ -65,6 +67,8 @@ public class AuthorizeController {
 
             return "redirect:/";
         } else {
+            //登录失败
+            log.error("callback get github error");
             return "redirect:/";
         }
 
