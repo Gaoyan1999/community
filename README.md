@@ -24,4 +24,8 @@
 mvn flyway:migrate
 mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 java -jar mybatis-generator-core-x.x.x.jar -configfile \temp\generatorConfig.xml -overwrite
+
+java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar
+
+java  -jar  -Dspring.config.location=src/main/resources/application-production.properties   target/community-0.0.1-SNAPSHOT.jar
 ```
