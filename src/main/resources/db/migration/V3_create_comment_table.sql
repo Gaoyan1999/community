@@ -1,7 +1,7 @@
 -- auto-generated definition
 create table COMMENT
 (
-    ID           BIGINT default NEXT VALUE FOR "PUBLIC"."SYSTEM_SEQUENCE_D96E687A_26BB_472E_9144_ADA486D7F96E" auto_increment,
+    ID           BIGINT auto_increment  not null,
     PARENT_ID    BIGINT  not null,
     TYPE         INTEGER not null,
     COMMENTATOR  BIGINT  not null,

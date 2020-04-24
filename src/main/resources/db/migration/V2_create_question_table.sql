@@ -1,7 +1,7 @@
 -- auto-generated definition
 create table QUESTION
 (
-    ID            BIGINT  default NEXT VALUE FOR "PUBLIC"."SYSTEM_SEQUENCE_7CF1009D_8773_4579_BF0A_27D23C3ACFEF" auto_increment,
+    ID           BIGINT auto_increment  not null,
     TITLE         VARCHAR(50)  not null,
     DESCRIPTION   CLOB         not null,
     GMT_CREATE    BIGINT  default 0,

@@ -1,7 +1,7 @@
 -- auto-generated definition
 create table NOTIFICATION
 (
-    ID            BIGINT  default NEXT VALUE FOR "PUBLIC"."SYSTEM_SEQUENCE_4A3735DD_D8C9_49D7_B2B6_B0E7BCA28173" auto_increment,
+    ID        BIGINT auto_increment  not null,
     NOTIFIER      BIGINT            not null,
     RECEIVER      BIGINT            not null,
     OUTERID       BIGINT            not null,
